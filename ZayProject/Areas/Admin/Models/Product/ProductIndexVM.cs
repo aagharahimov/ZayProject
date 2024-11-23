@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-namespace ZayProject.Areas.Admin.Models.Product;
+using ZayProject.Entities;
 using ZayProject.Models.Shop;
+namespace ZayProject.Areas.Admin.Models.Product;
 
 public class ProductIndexVM
 {
-    public List<ProductVM> Products { get; set; }
+    public List<Entities.Product> Products { get; set; }
 }

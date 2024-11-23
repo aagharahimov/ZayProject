@@ -13,4 +13,5 @@ public class ProductCreateVM
     public string SizeOptions { get; set; }
     public int CategoryId { get; set; }
     public string PhotoPath { get; set; }
+    public double AverageRating { get; set; }
 }

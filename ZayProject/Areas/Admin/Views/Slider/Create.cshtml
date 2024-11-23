@@ -1,0 +1,33 @@
+@using ZayProject.Areas.Admin.Models.Slider
+@model SliderCreateVM
+
+<div class="container mt-5">
+<h2 class="mb-4">Create New Slider</h2>
+<form asp-action="create" method="post">
+<div class="mb-3">
+    <label asp-for="Title" class="form-label">Title</label>
+    <input asp-for="Title" type="text" class="form-control" placeholder="Enter Title">
+    <div class="form-text text-danger" asp-validation-for="Title"></div>
+</div>
+        
+<div class="mb-3">
+    <label asp-for="SubTitle" class="form-label">Subtitle</label>
+    <input asp-for="SubTitle" type="text" class="form-control" placeholder="Enter SubTitle">
+    <div class="form-text text-danger" asp-validation-for="SubTitle"></div>
+</div>
+        
+<div class="mb-3">
+    <label asp-for="Description" class="form-label">Description</label>
+    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter Description"></textarea>
+    <div class="form-text text-danger" asp-validation-for="Description"></div>
+</div>
+        
+<div class="mb-3">
+<label asp-for="PhotoPath" class="form-label">Photo URL</label>
+<input asp-for="PhotoPath" type="text" class="form-control" placeholder="Enter Photo URL">
+<div class="form-text text-danger" asp-validation-for="PhotoPath"></div>
+</div>
+        
+<button type="submit" class="btn btn-success w-100">Create Slider</button>
+</form>
+</div>

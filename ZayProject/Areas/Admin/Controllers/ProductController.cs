@@ -94,12 +94,12 @@ public class ProductController : Controller
         var product = _context.Products.Find(id);
         if (product is null) return NotFound();
 
-        product.Title = model.Name;
+        product.Name = model.Name;
         product.Price = model.Price;
-        product.Size = model.SizeOptions;
+        product.SizeOptions = model.SizeOptions;
         product.PhotoPath = model.PhotoPath;
         product.CategoryId = model.CategoryId;
-        product.ModifiedAt = DateTime.Now;
+        product.UpdatedAt = DateTime.Now;
 
         _context.Products.Update(product);
         _context.SaveChanges();

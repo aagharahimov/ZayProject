@@ -1,6 +1,7 @@
+using ZayProject.Entities;
 namespace ZayProject.Models.Home;
 
 public class HomeIndexVM
 {
-    public List<SliderVM> Sliders { get; set; }
+    public List<Slider> Sliders { get; set; }
 }

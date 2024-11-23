@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ZayProject.Areas.Admin.Models.Slider;
 using ZayProject.Data;
 using ZayProject.Entities;
 
@@ -18,8 +19,11 @@ public class SliderController : Controller
 
     public IActionResult Index()
     {
-        var sliders = _context.Sliders.ToList();
-        return View(sliders);
+        var model = new SliderIndexVM
+        {
+            Sliders = _context.Sliders.ToList()
+        };
+        return View(model);
     }
 
     #endregion
@@ -65,11 +69,11 @@ public class SliderController : Controller
         var slider = _context.Sliders.Find(id);
         if (slider is null) return NotFound();
 
-        slider.Header1 = model.Header1;
-        slider.Header2 = model.Header2;
+        slider.Title = model.Title;
+        slider.SubTitle = model.SubTitle;
         slider.Description = model.Description;
         slider.PhotoPath = model.PhotoPath;
-        slider.ModifiedAt = DateTime.Now;
+        slider.UpdatedAt = DateTime.Now;
 
         _context.Sliders.Update(slider);
         _context.SaveChanges();

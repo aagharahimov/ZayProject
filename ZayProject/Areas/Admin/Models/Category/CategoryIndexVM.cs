@@ -5,5 +5,5 @@ namespace ZayProject.Areas.Admin.Models.Category;
 
 public class CategoryIndexVM
 {
-    public List<CategoryVM> Categories { get; set; }
+    public List<Entities.Category> Categories { get; set; }
 }

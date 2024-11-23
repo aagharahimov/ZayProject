@@ -18,20 +18,9 @@ namespace ZayProject.Controllers
 
         public IActionResult Index()
         {
-            var model = new SliderIndexVM
+            var model = new HomeIndexVM()
             {
-                Sliders = _context.Sliders
-                    .Select(s => new SliderVM
-                    {
-                        Id = s.Id,
-                        Title = s.Title,
-                        SubTitle = s.SubTitle,
-                        Description = s.Description,
-                        PhotoPath = s.PhotoPath,
-                        CreatedAt = s.CreatedAt,
-                        UpdatedAt = s.UpdatedAt
-                    })
-                    .ToList()
+                Sliders = _context.Sliders.ToList()
             };
 
             return View(model);
