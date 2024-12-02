@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ZayProject.Areas.Admin.Models.Category;
 using ZayProject.Data;
 using ZayProject.Entities;
 
@@ -19,8 +20,13 @@ public class CategoryController : Controller
     public IActionResult Index()
     {
         var categories = _context.Categories.ToList();
-        return View(categories);
-    }
+        var model = new CategoryIndexVM
+        {
+            Categories = categories
+        };
+        
+        return View(model);
+    }   
 
     #endregion
 
@@ -29,15 +35,21 @@ public class CategoryController : Controller
     [HttpGet]
     public IActionResult Create()
     {
-        return View();
+        var model = new CategoryCreateVM();
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult Create(Category model)
+    public IActionResult Create(CategoryCreateVM model)
     {
         if (!ModelState.IsValid) return View(model);
+        
+        var category = new Category
+        {
+            Name = model.Name
+        };
 
-        _context.Categories.Add(model);
+        _context.Categories.Add(category);
         _context.SaveChanges();
 
         return RedirectToAction(nameof(Index));
@@ -52,12 +64,18 @@ public class CategoryController : Controller
     {
         var category = _context.Categories.Find(id);
         if (category is null) return NotFound();
+        
+        var model = new CategoryUpdateVM
+        {
+            Id = category.Id,
+            Name = category.Name
+        };
 
-        return View(category);
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult Update(int id, Category model)
+    public IActionResult Update(int id, CategoryUpdateVM model)
     {
         if (!ModelState.IsValid) return View(model);
 

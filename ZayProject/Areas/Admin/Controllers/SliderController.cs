@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ZayProject.Areas.Admin.Models.Slider;
 using ZayProject.Data;
 using ZayProject.Entities;
@@ -23,11 +24,12 @@ public class SliderController : Controller
         {
             Sliders = _context.Sliders.ToList()
         };
+        
         return View(model);
     }
 
     #endregion
-
+    
     #region Create
 
     [HttpGet]
@@ -37,12 +39,21 @@ public class SliderController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Slider model)
+    public IActionResult Create(SliderCreateVM model)
     {
         if (!ModelState.IsValid) return View(model);
 
-        model.CreatedAt = DateTime.Now;
-        _context.Sliders.Add(model);
+        var slider = new Slider()
+        {
+            Title = model.Title,
+            SubTitle = model.SubTitle,
+            Description = model.Description,
+            PhotoPath = model.PhotoPath,
+            CreatedAt = DateTime.Now,
+            // UpdatedAt = DateTime.Now
+        };
+
+        _context.Sliders.Add(slider);
         _context.SaveChanges();
 
         return RedirectToAction(nameof(Index));
@@ -58,14 +69,37 @@ public class SliderController : Controller
         var slider = _context.Sliders.Find(id);
         if (slider is null) return NotFound();
 
-        return View(slider);
+        var model = new SliderUpdateVM
+        {
+            Id = slider.Id,
+            Title = slider.Title,
+            SubTitle = slider.SubTitle,
+            Description = slider.Description,
+            PhotoPath = slider.PhotoPath
+        };
+        
+        ViewBag.Sliders = _context.Sliders.Select(c => new SelectListItem
+        {
+            Text = c.Title,
+            Value = c.Id.ToString()
+        }).ToList();
+
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult Update(int id, Slider model)
+    public IActionResult Update(int id, SliderUpdateVM model)
     {
-        if (!ModelState.IsValid) return View(model);
-
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Sliders = _context.Sliders.Select(c => new SelectListItem
+            {
+                Text = c.Title,
+                Value = c.Id.ToString()
+            }).ToList();
+            return View(model);
+        }
+        
         var slider = _context.Sliders.Find(id);
         if (slider is null) return NotFound();
 
@@ -82,6 +116,9 @@ public class SliderController : Controller
     }
 
     #endregion
+
+
+
 
     #region Delete
 

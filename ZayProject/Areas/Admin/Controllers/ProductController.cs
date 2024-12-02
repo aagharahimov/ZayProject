@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ZayProject.Areas.Admin.Models.Product;
 using ZayProject.Data;
 using ZayProject.Entities;
 
@@ -21,7 +22,11 @@ public class ProductController : Controller
     public IActionResult Index()
     {
         var products = _context.Products.Include(p => p.Category).ToList();
-        return View(products);
+        var model = new ProductIndexVM()
+        {
+            Products = products
+        };
+        return View(model);
     }
 
     #endregion
@@ -31,20 +36,22 @@ public class ProductController : Controller
     [HttpGet]
     public IActionResult Create()
     {
+        var model = new ProductCreateVM();
         ViewBag.Categories = _context.Categories.Select(c => new SelectListItem
         {
             Text = c.Name,
             Value = c.Id.ToString()
         }).ToList();
 
-        return View();
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult Create(Product model)
+    public IActionResult Create(ProductCreateVM model)
     {
         if (!ModelState.IsValid)
         {
+            ModelState.AddModelError("CategoryId", "The selected category is invalid.");
             ViewBag.Categories = _context.Categories.Select(c => new SelectListItem
             {
                 Text = c.Name,
@@ -52,8 +59,18 @@ public class ProductController : Controller
             }).ToList();
             return View(model);
         }
+        
+        var product = new Product
+        {
+            Name = model.Name,
+            Price = model.Price,
+            SizeOptions = model.SizeOptions,
+            PhotoPath = model.PhotoPath,
+            CategoryId = model.CategoryId, 
+            AverageRating = (decimal)model.AverageRating,
+        };
 
-        _context.Products.Add(model);
+        _context.Products.Add(product);
         _context.SaveChanges();
 
         return RedirectToAction(nameof(Index));
@@ -68,6 +85,16 @@ public class ProductController : Controller
     {
         var product = _context.Products.Find(id);
         if (product is null) return NotFound();
+        
+        var model = new ProductUpdateVM()
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Price = product.Price,
+            SizeOptions = product.SizeOptions,
+            PhotoPath = product.PhotoPath,
+            CategoryId = product.CategoryId
+        };
 
         ViewBag.Categories = _context.Categories.Select(c => new SelectListItem
         {
@@ -75,11 +102,11 @@ public class ProductController : Controller
             Value = c.Id.ToString()
         }).ToList();
 
-        return View(product);
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult Update(int id, Product model)
+    public IActionResult Update(int id, ProductUpdateVM model)
     {
         if (!ModelState.IsValid)
         {

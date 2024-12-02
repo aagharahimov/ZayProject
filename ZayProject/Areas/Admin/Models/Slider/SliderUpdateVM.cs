@@ -1,8 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 namespace ZayProject.Areas.Admin.Models.Slider;
 
+
 public class SliderUpdateVM
 {
+    public int Id { get; set; }
+    
     [Required(ErrorMessage = "Title is required")]
     [MinLength(5, ErrorMessage = "Title must be at least 5 characters long.")]
     public string Title { get; set; }
